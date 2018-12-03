@@ -1,0 +1,3 @@
+fasta_ref: /work/HCC/Genomes/Bos_taurus/NCBI/ARS-UCD1.2/WholeGenomeFasta/genome.fa
+bwa_ref: /work/HCC/BCRF/indices/bwa/Bos_taurus/NCBI/ARS-UCD1.2/genome.fa
+faidx_ref: /work/HCC/BCRF/Genomes/Bos_taurus/NCBI/ARS-UCD1.2/WholeGenomeFasta/genome.fa.fai

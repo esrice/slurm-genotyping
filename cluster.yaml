@@ -1,0 +1,24 @@
+__default__:
+#    time: "24:00:00"
+    partition: batch
+#    mem: 12G
+    out: logs/{rule}.{wildcards}.out
+    err: logs/{rule}.{wildcards}.err
+
+#bwa_map:
+#    time: "80:00:00"
+#    mem: 24G
+
+generate_regions:
+    out: logs/generate_regions.out
+    err: logs/generate_regions.err
+
+make_regions_files:
+    out: logs/make_regions_files.out
+    err: logs/make_regions_files.err
+
+#freebayes:
+#    mem: 15G
+#
+#freebayes_join:
+#    time: "80:00:00"
