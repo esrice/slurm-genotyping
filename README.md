@@ -16,6 +16,12 @@ Now, install Snakemake:
 conda install -c bioconda -c conda-forge snakemake
 ```
 
+Finally, navigate to where you want to do your work and download this repository:
+```
+git clone https://github.com/esrice/slurm-genotyping.git
+```
+Everything will be in the `slurm-genotyping` subdirectory after that.
+
 ## Running
 This pipeline does not include read QC, as this is something I like to do
 manually. Once you've got your reads in good shape, put them in the `reads`
