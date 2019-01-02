@@ -1,6 +1,6 @@
 configfile: "config.yaml"
 
-SAMPLES, = glob_wildcards('reads/{sample}.fastq.gz')
+SAMPLES, = glob_wildcards('reads/{sample}_R1.fastq.gz')
 
 rule all:
     input: expand('alignments/{sample}.bam.bai', sample=SAMPLES)
