@@ -4,4 +4,5 @@
 #    --error {cluster.err} --ntasks-per-node {threads}"
 
 snakemake -j 30 --rerun-incomplete --cluster-config cluster.yaml \
-    --cluster ./slurm_submit.py --restart-times 1
+    --cluster ./slurm_submit.py --cluster-status ./slurm_status.py \
+    --restart-times 1
