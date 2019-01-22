@@ -3,9 +3,10 @@
 # this script is based on
 # https://groups.google.com/forum/#!topic/snakemake/7cyqAIfgeq4
 
-import os
 import sys
 import re
+import shlex
+from subprocess import Popen, PIPE
 from snakemake.utils import read_job_properties
 
 def main():
@@ -24,16 +25,18 @@ def main():
     cluster_params['err'] = job_properties['cluster']['err']
     cluster_params['threads'] = job_properties.get('threads', 1)
 
-    out = os.system("sbatch -t {hours:02d}:00:00 -p {partition} --mem {mem}G \
+    command = "sbatch -t {hours:02d}:00:00 -p {partition} --mem {mem}G \
             -J {rule} --output {out} --error {err} --ntasks-per-node {threads} \
-            {script}".format(script=job_script, **cluster_params),
-            stdout=subprocess.PIPE).stdout.decode('utf-8')
+            {script}".format(script=job_script, **cluster_params)
+    args = shlex.split(command)
+    proc = Popen(args, stdout=PIPE)
+    out, err = proc.communicate()
 
     # snakemake needs the jobID for checking the status later
-    pattern = re.compile(r'Submitted batch job \d+')
-    match = pattern.match(out)
+    pattern = re.compile(r'Submitted batch job (\d+)')
+    match = pattern.match(out.decode('utf-8'))
     if match:
-        print(jobid)
+        print(match.group(1))
     else:
         print('Failure to submit job:\n{}'.format(out), file=sys.stderr)
 

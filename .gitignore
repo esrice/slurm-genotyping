@@ -1,0 +1,6 @@
+reads/*
+variant-calls/*
+logs/*
+.snakemake/*
+alignments/*
+*.swp

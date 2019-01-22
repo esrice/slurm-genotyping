@@ -3,7 +3,8 @@ configfile: "config.yaml"
 SAMPLES, = glob_wildcards('reads/{sample}_R1.fastq.gz')
 
 rule all:
-    input: expand('alignments/{sample}.bam.bai', sample=SAMPLES)
+    #input: expand('alignments/{sample}.bam.bai', sample=SAMPLES)
+    input: "variant-calls/raw.vcf.gz"
 
 rule bwa_map:
     input:
@@ -16,7 +17,7 @@ rule bwa_map:
     threads: 8
     resources:
         mem=lambda wildcards, attempt: 12*attempt,
-        hours=lambda wildcards, attempt: 24*attempt
+        hours=lambda wildcards, attempt: 48*attempt
     shell:
         """
         module load bwa biodata samtools/1.9
@@ -32,7 +33,11 @@ rule bam_index:
     output:
         "alignments/{sample}.bam.bai"
     shell:
-        "samtools index {input}"
+        """
+        module load samtools/1.9
+
+        samtools index {input}
+        """
 
 # TODO make variable-sized regions based on bam coverage
 rule generate_regions:
