@@ -27,26 +27,29 @@ def main():
             stdout=subprocess.PIPE).stdout.decode('utf-8')
 
     # get the job state from the scontrol output
-    state = parse_key_value(out)['JobState']
+    try:
+        state = parse_key_value(out)['JobState']
 
-    map_state = {"PENDING": 'running',
-                 "RUNNING": 'running',
-                 "SUSPENDED": 'running',
-                 "CANCELLED": 'failed',
-                 "COMPLETING": 'running',
-                 "COMPLETED": 'success',
-                 "CONFIGURING": 'running',
-                 "FAILED": 'failed',
-                 "TIMEOUT": 'failed',
-                 "PREEMPTED": 'failed',
-                 "NODE_FAIL": 'failed',
-                 "REVOKED": 'failed',
-                 "SPECIAL_EXIT": 'failed',
-                 "": 'success'}
+        map_state = {"PENDING": 'running',
+                     "RUNNING": 'running',
+                     "SUSPENDED": 'running',
+                     "CANCELLED": 'failed',
+                     "COMPLETING": 'running',
+                     "COMPLETED": 'success',
+                     "CONFIGURING": 'running',
+                     "FAILED": 'failed',
+                     "TIMEOUT": 'failed',
+                     "PREEMPTED": 'failed',
+                     "NODE_FAIL": 'failed',
+                     "REVOKED": 'failed',
+                     "SPECIAL_EXIT": 'failed',
+                     "": 'success'}
 
-    # output whether the job succeeded, failed, or is still
-    # running, based on the JobState string
-    print(map_state[state])
+        # output whether the job succeeded, failed, or is still
+        # running, based on the JobState string
+        print(map_state[state])
+    except: # if something didn't work, assume job failed
+        print('failed')
 
 if __name__ == '__main__':
     main()
