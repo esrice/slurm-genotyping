@@ -25,18 +25,7 @@ rule bwa_map:
         bwa mem -t {threads} -R '{params.rg}' {config[bwa_ref]} \
             {input.r1} {input.r2} | samtools view -bh - | samtools sort - \
             | samtools rmdup - {output}
-        """
-
-rule bam_index:
-    input:
-        "alignments/{sample}.bam"
-    output:
-        "alignments/{sample}.bam.bai"
-    shell:
-        """
-        module load samtools/1.9
-
-        samtools index {input}
+        samtools index {output}
         """
 
 # TODO make variable-sized regions based on bam coverage
