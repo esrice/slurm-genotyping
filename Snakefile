@@ -40,9 +40,9 @@ rule generate_regions:
         mkdir -p variant-calls/regions
         """
 
-rule make_regions_files:
+checkpoint make_regions_files:
     input: "variant-calls/regions.list"
-    output: dynamic("variant-calls/regions/{region}.reg")
+    output: directory("variant-calls/regions/")
     run:
         for i, line in enumerate(open(str(input))):
             with open("variant-calls/regions/{}.reg".format(i), 'w') as out:
@@ -65,8 +65,18 @@ rule freebayes:
         freebayes --region $region -f $ref {input.bams} | gzip > {output}
         """
 
+def list_join_inputs(wildcards):
+    # make sure the make_regions_files step is complete
+    checkpoint_output = checkpoints.make_regions_files.get(**wildcards).output
+
+    # get a list of all the regions that make_regions_files created files for
+    regions, = glob_wildcards(checkpoint_output + '/{region}.ref')
+
+    # return a list of region genotype files that we need as input to join step
+    return expand("variant-calls/regions/{region}.vcf.gz", region=regions)
+
 rule freebayes_join:
-    input: dynamic("variant-calls/regions/{region}.vcf.gz")
+    input: list_join_inputs
     output: "variant-calls/raw.vcf.gz"
     resources:
         hours=80
