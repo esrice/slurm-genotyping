@@ -91,7 +91,7 @@ rule freebayes_join:
 rule quality_filter_and_sort:
     input: 'variant-calls/raw.vcf.gz'
     output: 'variant-calls/variants.Q20.sorted.vcf.gz'
-    resources: mem=16, hours=80
+    resources: mem=16, hours=10
     shell:
         """
         module load bcftools/1.8
