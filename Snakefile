@@ -4,7 +4,7 @@ SAMPLES, = glob_wildcards('reads/{sample}_R1.fastq.gz')
 
 rule all:
     #input: expand('alignments/{sample}.bam.bai', sample=SAMPLES)
-    input: "variant-calls/raw.vcf.gz"
+    input: "variant-calls/variants.Q20.sorted.vcf.gz"
 
 rule bwa_map:
     input:
@@ -86,4 +86,16 @@ rule freebayes_join:
 
         zcat variant-calls/regions/*.vcf.gz | vcffirstheader | vcfstreamsort \
             | vcfuniq | gzip > {output}
+        """
+
+rule quality_filter_and_sort:
+    input: 'variant-calls/raw.vcf.gz'
+    output: 'variant-calls/variants.Q20.sorted.vcf.gz'
+    resources: mem=16, hours=80
+    shell:
+        """
+        module load bcftools/1.8
+
+        bcftools filter -i 'QUAL>=20' -Ou {input} | \
+            bcftools sort -Oz -o {output} -m 13G
         """
