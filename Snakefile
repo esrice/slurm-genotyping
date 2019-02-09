@@ -67,11 +67,9 @@ rule freebayes:
 
 def list_join_inputs(wildcards):
     # make sure the make_regions_files step is complete
-    checkpoint_output = checkpoints.make_regions_files.get(**wildcards).output
-
+    checkpoint_output = checkpoints.make_regions_files.get(**wildcards).output[0]
     # get a list of all the regions that make_regions_files created files for
-    regions, = glob_wildcards(checkpoint_output + '/{region}.ref')
-
+    regions, = glob_wildcards(checkpoint_output + '/{region}.reg')
     # return a list of region genotype files that we need as input to join step
     return expand("variant-calls/regions/{region}.vcf.gz", region=regions)
 
