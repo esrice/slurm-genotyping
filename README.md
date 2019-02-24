@@ -34,11 +34,12 @@ indices for your reference genome.
 
 Finally, run the pipeline with the following command:
 ```
-sh snake_submit.sh
+sbatch snake_submit.sh
 ```
 
 This will break the task into small jobs and submit each of them to the cluster.
 If something goes wrong, you can fix it and then run the above command again
-and it will start back up right from where it left off.
+and it will start back up right from where it left off. You can monitor the
+pipeline's progress in `snakemake.out`.
 
 If everything works, you'll have a vcf at `variant-calls/raw.vcf.gz` at the end.
