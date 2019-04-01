@@ -1,22 +1,10 @@
 # slurm-genotyping
-Genotyping with snakemake on SLURM. This package is made to be used on the SLURM
+Genotyping on SLURM. This package is made to be used on the SLURM
 cluster 'crane' at the UNL HCC, but should be able to be used on other slurm
 clusters with some modification.
 
 ## Installation
-This pipeline uses the Snakemake workflow manager. First, if you don't have
-miniconda, install it:
-```
-wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh
-```
-
-Now, install Snakemake:
-```
-conda install -c bioconda -c conda-forge snakemake
-```
-
-Finally, navigate to where you want to do your work and download this repository:
+Navigate to where you want to do your work and download this repository:
 ```
 git clone https://github.com/esrice/slurm-genotyping.git
 ```
@@ -25,12 +13,13 @@ Everything will be in the `slurm-genotyping` subdirectory after that.
 ## Running
 This pipeline does not include read QC, as this is something I like to do
 manually. Once you've got your reads in good shape, put them in the `reads`
-subdirectory with names `{sample}_R1.fastq.gz` and `{sample}_R2.fastq.gz`, where
-`{sample}` is some descriptive identifier such as library name. Symlinks are
-fine.
+subdirectory. Symlinks are fine.
 
-Next, edit `config.yaml` and change the paths to the paths of the fasta and
-indices for your reference genome.
+To tell the pipeline where your reference genome and reads are, edit
+`config.yaml` and change the paths to the paths of the fasta and indices for
+your reference genome. Also use the config file to tell this pipeline which
+fastq files correspond to which individuals. There are detailed instructions in
+the comments of this file, and example entries to start with.
 
 Finally, run the pipeline with the following command:
 ```

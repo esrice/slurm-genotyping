@@ -1,4 +1,62 @@
+############################################################
+# Part 1: files                                            #
+#                                                          #
+# This part of the config file specifies what files you're #
+# running the pipeline on. You will definitely need to     #
+# edit this section.                                       #
+############################################################
+
+# this is the path to a fasta file of your reference genome
 fasta_ref: /work/HCC/Genomes/Bos_taurus/NCBI/ARS-UCD1.2/WholeGenomeFasta/genome.fa
+
+# this is the path to the basename of the bwa indices for your reference genome,
+# i.e., just the path to the fasta file without the bwa extensions like .bwt
 bwa_ref: /work/HCC/BCRF/indices/bwa/Bos_taurus/NCBI/ARS-UCD1.2/genome.fa
+
+# this is the path to the fasta index of your reference genome (should end in
+# .fai; can be generated with samtools faidx)
 faidx_ref: /work/HCC/BCRF/Genomes/Bos_taurus/NCBI/ARS-UCD1.2/WholeGenomeFasta/genome.fa.fai
-chunk_size: 1000000
+
+# this is a list of individuals you're genotyping. Each individual has a name
+# (some ID string unique to that individual) and a list of fastq files. The
+# fastq files can be gzipped or uncompressed. Individuals can have multiple
+# lanes or libraries, paired or unpaired (see below for examples)
+individuals:
+    - name: Luciano
+      reads:
+          - r1: LIB100814_S8_L001_R1_001.fastq.gz
+            r2: LIB100814_S8_L001_R2_001.fastq.gz
+          - r1: LIB100814_S8_L002_R1_001.fastq.gz
+            r2: LIB100814_S8_L002_R2_001.fastq.gz
+    - name: Jose
+      reads:
+          - r1: LIB100817_S11_L001_R1_001.fastq.gz
+            r2: LIB100817_S11_L001_R2_001.fastq.gz
+          - r1: LIB100817_S11_L002_R1_001.fastq.gz
+            r2: LIB100817_S11_L002_R2_001.fastq.gz
+          - r1: LIB100817_S11_L003_SE_001.fastq.gz
+    - name: Placido
+      reads:
+          - r1: LIB000016_S10_L001_R1_001.fastq.gz
+            r2: LIB000016_S10_L001_R2_001.fastq.gz
+
+############################################################
+# Part 2: parameters                                       #
+#                                                          #
+# This part of the config file is for fine-tuning          #
+# parameters for performance. Hopefully you won't need to  #
+# edit this section, but if your jobs are failing due to   #
+# going over time or memory limits, you may need to.       #
+############################################################
+
+bwa_memory_GB: 16
+bwa_threads: 8
+bwa_time_days: 4
+
+merge_memory_GB: 8
+merge_time_days: 1
+
+regions_memory_GB: 16
+regions_time_days: 4
+
+freebayes_num_regions: 100
