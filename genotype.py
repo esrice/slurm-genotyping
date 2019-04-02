@@ -9,10 +9,17 @@ import os
 def parse_args():
     parser = argparse.ArgumentParser(prog='genotype.py')
 
-    parser.add_argument('step', choices=['map', 'merge', 'call', 'regions'],
+    parser.add_argument('step', choices=['map', 'regions', 'call', 'join'],
             help='step to run (map, merge, or call)')
 
     return parser.parse_args()
+
+def check_files_exist(filenames):
+    """ Check if all files in a list exist and exit with an error if not. """
+    for f in filenames:
+        if not os.path.isfile(f):
+            print('FATAL: Missing file: {}'.format(f), file=sys.stderr)
+            sys.exit(1)
 
 def run_mapping(config):
     """ Run the mapping step of the pipeline. """
@@ -26,14 +33,15 @@ def run_mapping(config):
     num_alignments = 0
     for individual in config['individuals']:
         for i, lane in enumerate(individual['reads']):
-            input_filenames = 'reads/{}'.format(lane['r1'])
+            input_filenames = ['reads/{}'.format(lane['r1'])]
             if 'r2' in lane:
-                input_filenames += ',reads/{}'.format(lane['r2'])
+                input_filenames.append('reads/{}'.format(lane['r2']))
+            check_files_exist(input_filenames)
 
             output_filename = 'alignments/{}_{}.bam'.format(
                     individual['name'], i)
 
-            print('\t'.join([individual['name'], input_filenames,
+            print('\t'.join([individual['name'], ','.join(input_filenames),
                 output_filename]), file=alignments_list)
             num_alignments += 1
 
@@ -81,6 +89,10 @@ def run_freebayes(config):
     print('Submitted variant-calling job array. Wait until all jobs are done\n'
             'and then run join step.', file=sys.stderr)
 
+def run_join(config):
+    # TODO
+    print('This step not yet implemented.', file=sys.stderr)
+
 def main():
     args = parse_args()
 
@@ -89,12 +101,12 @@ def main():
 
     if args.step == 'map':
         run_mapping(config)
-    elif args.step == 'merge':
-        run_merge(config)
     elif args.step == 'regions':
         run_regions(config)
     elif args.step == 'call':
         run_freebayes(config)
+    elif args.step == 'join':
+        run_join(config)
 
 if __name__ == '__main__':
     main()

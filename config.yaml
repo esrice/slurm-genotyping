@@ -37,8 +37,8 @@ individuals:
           - r1: LIB100817_S11_L003_SE_001.fastq.gz
     - name: Placido
       reads:
-          - r1: LIB000016_S10_L001_R1_001.fastq.gz
-            r2: LIB000016_S10_L001_R2_001.fastq.gz
+          - r1: LIB100816_S10_L001_R1_001.fastq.gz
+            r2: LIB100816_S10_L001_R2_001.fastq.gz
 
 ############################################################
 # Part 2: parameters                                       #
