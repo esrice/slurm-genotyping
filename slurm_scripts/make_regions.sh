@@ -5,4 +5,4 @@
 module load freebayes/1.2 bamtools/2.4
 
 bamtools coverage < $infile | coverage_to_regions.py $faidx $num_regions \
-    > regions.bed
+    > lists/regions.bed

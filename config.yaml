@@ -53,10 +53,9 @@ bwa_memory_GB: 16
 bwa_threads: 8
 bwa_time_days: 4
 
-merge_memory_GB: 8
-merge_time_days: 1
-
 regions_memory_GB: 16
 regions_time_days: 4
 
 freebayes_num_regions: 100
+freebayes_memory_GB: 16
+freebayes_time_days: 7

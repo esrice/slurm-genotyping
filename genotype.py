@@ -51,42 +51,6 @@ def run_mapping(config):
     print('Submitted read mapping job array. Wait until all jobs are done\n'
             'and then run merge step.', file=sys.stderr)
 
-def run_merge(config):
-    """ Run the merge step of the pipeline. """
-
-    # first, make a list of merges to perform that can be
-    # easily read by a SLURM script
-    merges_list = open('lists/merges.tsv', 'w')
-    num_merges = 0
-    for individual in config['individuals']:
-        if len(individual['reads']) == 1: # no merging necessary
-            # just rename the bam file
-            os.rename('alignments/{}_0.bam'.format(individual['name']),
-                'alignments/{}.bam'.format(individual['name']))
-            pass
-        else: # merging necessary
-            input_filenames = 'alignments/{}_*.bam'.format(individual['name'])
-            output_filename = 'alignments/{}.bam'.format(individual['name'])
-            print('\t'.join([input_filenames, output_filename]),
-                file=merges_list)
-            num_merges += 1
-    merges_list.close()
-
-    # then, submit the merge jobs to SLURM as an array,
-    # but only if there are any.
-    if num_merges > 0:
-        command = ['sbatch', '--mem', '{}G'.format(config['merge_memory_GB']),
-            '--time', '{}-00:00:00'.format(config['merge_time_days']),
-            '--array', '1-{}'.format(num_merges),
-            'slurm_scripts/samtools_merge.sh']
-        subprocess.run(command, check=True, stdout=sys.stdout,
-            stderr=sys.stderr)
-        print('Submitted merging job array. Wait until all jobs are done\n'
-            'and then run regions step.', file=sys.stderr)
-    else:
-        print('No merges were necessary. You can run the regions step now',
-            file=sys.stderr)
-
 def run_regions(config):
     """ Run the regions step of the pipeline. """
     # rather than calculating total coverage across all
@@ -99,10 +63,23 @@ def run_regions(config):
         '--export', 'infile={},faidx={},num_regions={}'.format(
             infile, config['faidx_ref'], config['freebayes_num_regions']),
         'slurm_scripts/make_regions.sh']
-    #subprocess.run(command, check=True, stdout=sys.stdout, stderr=sys.stderr)
-    print(' '.join(command), file=sys.stderr)
+    subprocess.run(command, check=True, stdout=sys.stdout, stderr=sys.stderr)
     print('Submitted region-generating script. Wait until complete and then\n'
-        'run the next step.')
+        'run the call step.')
+
+def run_freebayes(config):
+    """ Run the variant-calling step of the pipeline. """
+    num_regions = 0
+    for line in open('lists/regions.bed', 'r'): num_regions += 1
+
+    command = ['sbatch', '--mem', '{}G'.format(config['freebayes_memory_GB']),
+        '--time', '{}-00:00:00'.format(config['freebayes_time_days']),
+        '--array', '1-{}'.format(num_regions),
+        '--export', 'ref={}'.format(config['fasta_ref']),
+        'slurm_scripts/bwa_mem.sh']
+    subprocess.run(command, check=True, stdout=sys.stdout, stderr=sys.stderr)
+    print('Submitted variant-calling job array. Wait until all jobs are done\n'
+            'and then run join step.', file=sys.stderr)
 
 def main():
     args = parse_args()
