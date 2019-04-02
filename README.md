@@ -4,7 +4,12 @@ cluster 'crane' at the UNL HCC, but should be able to be used on other slurm
 clusters with some modification.
 
 ## Installation
-Navigate to where you want to do your work and download this repository:
+First, you'll need a couple python packages for this to run:
+[pyyaml](https://pyyaml.org/wiki/PyYAMLDocumentation) and
+[pysam](https://github.com/pysam-developers/pysam). These are both available
+through both anaconda and pip.
+
+Next, navigate to where you want to do your work and download this repository:
 ```
 git clone https://github.com/esrice/slurm-genotyping.git
 ```
