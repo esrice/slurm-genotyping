@@ -8,7 +8,9 @@ Navigate to where you want to do your work and download this repository:
 ```
 git clone https://github.com/esrice/slurm-genotyping.git
 ```
-Everything will be in the `slurm-genotyping` subdirectory after that.
+Everything will be in the `slurm-genotyping` subdirectory after that. You can
+rename this directory to something that describes your project better if you
+want.
 
 ## Running
 This pipeline does not include read QC, as this is something I like to do
@@ -21,14 +23,22 @@ your reference genome. Also use the config file to tell this pipeline which
 fastq files correspond to which individuals. There are detailed instructions in
 the comments of this file, and example entries to start with.
 
-Finally, run the pipeline with the following command:
+### Mapping reads
+This pipeline uses `bwa mem` to map reads to the reference. To submit mapping
+jobs to the cluster, run
 ```
-sbatch snake_submit.sh
+./genotype.py map
 ```
+If it works, you will get a message from SLURM letting you know that a batch job
+has been submitted, and a message from the pipeline telling you to wait until
+all of the jobs are done running and then run the next step. After all the jobs
+are done, you can check to make sure they worked by reading the logs, which are
+in `logs/bwa_mem.[chunk_number].[err|out]`. If you get out of time/memory
+errors, you'll need to increase the limits in `config.yaml`.
 
-This will break the task into small jobs and submit each of them to the cluster.
-If something goes wrong, you can fix it and then run the above command again
-and it will start back up right from where it left off. You can monitor the
-pipeline's progress in `snakemake.out`.
+### Generating regions
+To parallelize the task of variant-calling, this pipeline breaks the genome into
+small regions. Some parts of the genome may have higher coverage than others, so
+in order to even out resource usage among the jobs, we break the genome into
+pieces of variable size based on their read coverage.
 
-If everything works, you'll have a vcf at `variant-calls/raw.vcf.gz` at the end.
