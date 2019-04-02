@@ -3,4 +3,5 @@ variant-calls/*
 logs/*
 .snakemake/*
 alignments/*
+lists/*.tsv
 *.swp
