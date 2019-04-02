@@ -68,8 +68,7 @@ def run_regions(config):
     infile = 'alignments/{}.bam'.format(config['individuals'][0]['name'])
     command = ['sbatch', '--mem', '{}G'.format(config['regions_memory_GB']),
         '--time', '{}-00:00:00'.format(config['regions_time_days']),
-        '--export', 'infile={},faidx={},num_regions={}'.format(
-            infile, config['faidx_ref'], config['freebayes_num_regions']),
+        '--export', 'infile={}'.format(infile),
         'slurm_scripts/make_regions.sh']
     subprocess.run(command, check=True, stdout=sys.stdout, stderr=sys.stderr)
     print('Submitted region-generating script. Wait until complete and then\n'
