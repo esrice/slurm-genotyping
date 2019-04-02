@@ -46,17 +46,17 @@ def main():
 
         if lchrom != chrom:
             if lchrom:
-                print('{}:{}-{}\t{}'.format(lchrom, lpos, ref_lengths[lchrom]))
+                print('\t'.join(map(str, [lchrom, lpos, ref_lengths[lchrom]])))
                 lpos = 0
                 bp_in_region = 0
             lchrom = chrom
         bp_in_region += depth
         if bp_in_region > bp_per_region:
-            print('{}:{}-{}'.format(chrom, lpos, pos))
+            print('\t'.join(map(str, [chrom, lpos, pos])))
             lpos = pos
             bp_in_region = 0
 
-    print('{}:{}-{}'.format(lchrom, lpos, ref_lengths[lchrom]))
+    print('\t'.join(map(str, [lchrom, lpos, ref_lengths[lchrom]])))
 
 if __name__ == '__main__':
     main()
