@@ -5,7 +5,7 @@
 module load freebayes/1.2
 
 ((chunk_number = SLURM_ARRAY_TASK_ID - 1))
-chunk=$(printf "r%03d" $chunk_number)
+chunk=$(printf "r%04d" $chunk_number)
 bams_list=$(cut -f3 lists/alignments.tsv | tr '\n' ' ')
 
 freebayes -t regions/$chunk -f $ref $bams_list | bgzip > regions/${chunk}.vcf.gz
