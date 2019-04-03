@@ -77,13 +77,10 @@ def run_regions(config):
 
 def run_freebayes(config):
     """ Run the variant-calling step of the pipeline. """
-    num_regions = 0
-    for line in open('lists/regions.bed', 'r'): num_regions += 1
-
     command = ['sbatch', '--mem', '{}G'.format(config['freebayes_memory_GB']),
         '--time', '{}-00:00:00'.format(config['freebayes_time_days']),
-        '--array', '1-{}'.format(num_regions),
-        '--export', 'ref={}'.format(config['fasta_ref']),
+        '--array', '1-{}'.format(config['freebayes_num_jobs']),
+        '--export', 'ref={}'.format(config['bwa_ref']),
         'slurm_scripts/bwa_mem.sh']
     subprocess.run(command, check=True, stdout=sys.stdout, stderr=sys.stderr)
     print('Submitted variant-calling job array. Wait until all jobs are done\n'
