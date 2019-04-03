@@ -6,16 +6,12 @@
 # edit this section.                                       #
 ############################################################
 
-# this is the path to a fasta file of your reference genome
-fasta_ref: /work/HCC/Genomes/Bos_taurus/NCBI/ARS-UCD1.2/WholeGenomeFasta/genome.fa
-
 # this is the path to the basename of the bwa indices for your reference genome,
 # i.e., just the path to the fasta file without the bwa extensions like .bwt
 bwa_ref: /work/HCC/BCRF/indices/bwa/Bos_taurus/NCBI/ARS-UCD1.2/genome.fa
 
-# this is the path to the fasta index of your reference genome (should end in
-# .fai; can be generated with samtools faidx)
-faidx_ref: /work/HCC/BCRF/Genomes/Bos_taurus/NCBI/ARS-UCD1.2/WholeGenomeFasta/genome.fa.fai
+# this is the path to a faidx-indexed copy of your reference genome
+faidx_ref: /work/HCC/BCRF/Genomes/Bos_taurus/NCBI/ARS-UCD1.2/WholeGenomeFasta/genome.fa
 
 # this is a list of individuals you're genotyping. Each individual has a name
 # (some ID string unique to that individual) and a list of fastq files. The

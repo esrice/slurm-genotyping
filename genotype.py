@@ -57,7 +57,7 @@ def run_mapping(config):
         'slurm_scripts/bwa_mem.sh']
     subprocess.run(command, check=True, stdout=sys.stdout, stderr=sys.stderr)
     print('Submitted read mapping job array. Wait until all jobs are done\n'
-            'and then run merge step.', file=sys.stderr)
+            'and then run regions step.', file=sys.stderr)
 
 def run_regions(config):
     """ Run the regions step of the pipeline. """
@@ -80,8 +80,8 @@ def run_freebayes(config):
     command = ['sbatch', '--mem', '{}G'.format(config['freebayes_memory_GB']),
         '--time', '{}-00:00:00'.format(config['freebayes_time_days']),
         '--array', '1-{}'.format(config['freebayes_num_jobs']),
-        '--export', 'ref={}'.format(config['bwa_ref']),
-        'slurm_scripts/bwa_mem.sh']
+        '--export', 'ref={}'.format(config['faidx_ref']),
+        'slurm_scripts/freebayes.sh']
     subprocess.run(command, check=True, stdout=sys.stdout, stderr=sys.stderr)
     print('Submitted variant-calling job array. Wait until all jobs are done\n'
             'and then run join step.', file=sys.stderr)
