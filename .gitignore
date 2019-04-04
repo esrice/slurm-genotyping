@@ -6,3 +6,4 @@ alignments/*
 lists/*.tsv
 regions/r*
 *.swp
+*.vcf.gz

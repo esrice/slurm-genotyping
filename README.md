@@ -46,4 +46,32 @@ To parallelize the task of variant-calling, this pipeline breaks the genome into
 small regions. Some parts of the genome may have higher coverage than others, so
 in order to even out resource usage among the jobs, we break the genome into
 pieces of variable size based on their read coverage.
+```
+./genotype.py regions
+```
+Again, if it works, you will get a message from SLURM letting you know a job was
+submitted. Wait until the job is complete and then check the logs to make sure
+it finished without errors. Then, move on to the variant-calling step.
 
+### Variant-calling
+This pipeline uses `freebayes` to call variants in each of the regions.
+```
+./genotype.py call
+```
+This will submit a job array with one job per region generated in the last step.
+Wait for all the jobs to be done, verify that the logs do not indicate any
+issues, and then move on to the final step.
+
+### Joining regions
+Finally, the variant calls for each of the regions need to be joined into a
+single file, and then sorted and indexed.
+```
+./genotype.py join
+```
+Once this job is done, you will have a final vcf in `variants.Q20.vcf.gz`.
+
+### Cleaning up
+This pipeline generates a bunch of intermediate files. If you are satisfied with
+the final results, you can get rid of all of those intermediate files to save
+space. Alignments are in the `alignments/` subdirectory and per-region files are
+in the `regions/` subdirectory.

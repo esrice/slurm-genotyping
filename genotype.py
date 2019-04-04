@@ -87,8 +87,14 @@ def run_freebayes(config):
             'and then run join step.', file=sys.stderr)
 
 def run_join(config):
-    # TODO
-    print('This step not yet implemented.', file=sys.stderr)
+    """ Run the join step of the pipeline. """
+    command = ['sbatch', '--mem', '{}G'.format(config['join_memory_GB']),
+        '--time', '{}-00:00:00'.format(config['join_time_days']),
+        '--export', 'sortmem={}G'.format(config['join_memory_GB'] - 4),
+        'slurm_scripts/join.sh']
+    subprocess.run(command, check=True, stdout=sys.stdout, stderr=sys.stderr)
+    print('Submitted join job. When it is done your final variant calls will\n'
+            'be in variants.Q20.vcf.gz.', file=sys.stderr)
 
 def main():
     args = parse_args()
@@ -96,6 +102,11 @@ def main():
     # TODO check that yaml has everything required
     config = yaml.load(open('config.yaml', 'r'))
 
+    # TODO before each step, check that required files are
+    # present so that the user gets an error from this
+    # script and no jobs are submitted, rather than
+    # submitting a bunch of jobs that will all fail and
+    # making the user look through log files to figure out why.
     if args.step == 'map':
         run_mapping(config)
     elif args.step == 'regions':

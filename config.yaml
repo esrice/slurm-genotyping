@@ -55,3 +55,6 @@ regions_time_days: 1
 freebayes_num_jobs: 100 # number of SLURM jobs to divide freebayes into
 freebayes_memory_GB: 16
 freebayes_time_days: 7
+
+join_memory_GB: 16
+join_time_days: 3
