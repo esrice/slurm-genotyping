@@ -29,8 +29,8 @@ fastq files correspond to which individuals. There are detailed instructions in
 the comments of this file, and example entries to start with.
 
 ### Mapping reads
-This pipeline uses `bwa mem` to map reads to the reference. To submit mapping
-jobs to the cluster, run
+This pipeline uses [bwa mem](https://github.com/lh3/bwa) to map reads to the 
+reference. To submit mapping jobs to the cluster, run
 ```
 ./genotype.py map
 ```
@@ -54,7 +54,8 @@ submitted. Wait until the job is complete and then check the logs to make sure
 it finished without errors. Then, move on to the variant-calling step.
 
 ### Variant-calling
-This pipeline uses `freebayes` to call variants in each of the regions.
+This pipeline uses [freebayes](https://github.com/ekg/freebayes) to call variants
+in each of the regions.
 ```
 ./genotype.py call
 ```
