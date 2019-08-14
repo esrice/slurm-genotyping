@@ -41,8 +41,11 @@ def run_mapping(config):
             output_filename = 'alignments/{}_{}.bam'.format(
                     individual['name'], i)
 
-            print('\t'.join([individual['name'], ','.join(input_filenames),
-                output_filename]), file=alignments_list)
+            print('\t'.join(map(str, [
+                  individual['name'],
+                  ','.join(input_filenames),
+                  output_filename,
+                ])), file=alignments_list)
             num_alignments += 1
 
     alignments_list.close()
